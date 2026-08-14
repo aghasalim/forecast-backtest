@@ -1,0 +1,12 @@
+{
+ "series_total": 370,
+ "series_kept": 351,
+ "series_dropped_short": 19,
+ "rows": 10333957,
+ "trimmed_zero_prefix_median_hours": 8760,
+ "trimmed_zero_prefix_max_hours": 26016,
+ "raw_mb": 711.0,
+ "parquet_mb": 52.8,
+ "t_start": "2011-01-01 00:00:00",
+ "t_end": "2015-01-01 00:00:00"
+}
