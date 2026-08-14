@@ -1,0 +1,27 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - run: uv sync --frozen
+
+      # Each self-check asserts a function is correct on a signal whose answer
+      # is known analytically, so they need no dataset and CI does not depend
+      # on a 250 MB download.
+      - name: self-checks
+        run: |
+          uv run python src/fb/prepare.py --self-check
+          uv run python src/fb/eda.py --self-check
+
+      - name: lint
+        run: uv run ruff check src

@@ -59,7 +59,11 @@ def main() -> None:
     p = argparse.ArgumentParser()
     p.add_argument("--max-series", type=int, default=None,
                    help="keep only the N longest series (default: all 370)")
+    p.add_argument("--self-check", action="store_true")
     a = p.parse_args()
+    if a.self_check:
+        demo()
+        return
 
     raw = load_raw()
     hourly = to_hourly(raw)
@@ -97,6 +101,20 @@ def main() -> None:
     (ROOT / "reports" / "prepare.json").write_text(json.dumps(meta, indent=1))
     for k, v in meta.items():
         print(f"{k:34} {v}")
+
+
+def demo() -> None:
+    """Self-check the zero-prefix trim, which silently changes every baseline."""
+    idx = pd.date_range("2011-01-01", periods=10, freq="h")
+    s, n = trim_zero_prefix(pd.Series([0, 0, 0, 5, 6, 0, 7, 8, 9, 10], index=idx))
+    assert n == 3 and len(s) == 7, (n, len(s))
+    assert s.iloc[0] == 5
+    # an interior zero is a real reading and must survive
+    assert 0 in s.to_numpy()
+    # all-zero series is dropped entirely rather than kept as noise
+    s2, n2 = trim_zero_prefix(pd.Series([0] * 10, index=idx))
+    assert len(s2) == 0 and n2 == 10
+    print("self-check ok")
 
 
 if __name__ == "__main__":

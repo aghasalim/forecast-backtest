@@ -127,7 +127,12 @@ def figure(df: pd.DataFrame, one: str, acf: dict, out: dict) -> None:
 def main() -> None:
     p = argparse.ArgumentParser()
     p.add_argument("--sample-series", type=int, default=60)
-    o = run(p.parse_args().sample_series)
+    p.add_argument("--self-check", action="store_true")
+    a = p.parse_args()
+    if a.self_check:
+        demo()
+        return
+    o = run(a.sample_series)
 
     print(f"{o['series_total']} series, {o['rows']:,} hourly rows "
           f"({o['series_sampled']} sampled for autocorrelation)\n")
@@ -144,6 +149,23 @@ def main() -> None:
     print("held-out point are in train is (1-h)^2:")
     for k, v in o["prob_both_neighbours_in_train"].items():
         print(f"  {k:18} {v:.2f}")
+
+
+def demo() -> None:
+    """Self-check autocorrelation on signals whose answer is known."""
+    t = np.arange(2000)
+    # a pure 24-period sine: lag-24 must be ~1, lag-12 must be ~-1
+    sine = np.sin(2 * np.pi * t / 24)
+    assert autocorr(sine, 24) > 0.99, autocorr(sine, 24)
+    assert autocorr(sine, 12) < -0.99, autocorr(sine, 12)
+    # white noise: every lag ~0
+    noise = np.random.default_rng(0).normal(size=5000)
+    assert abs(autocorr(noise, 1)) < 0.05, autocorr(noise, 1)
+    # a constant series has no defined correlation, and must not raise
+    assert np.isnan(autocorr(np.ones(100), 1))
+    # too short for the lag -> nan rather than an index error
+    assert np.isnan(autocorr(np.arange(5), 10))
+    print("self-check ok")
 
 
 if __name__ == "__main__":
