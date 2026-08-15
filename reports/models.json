@@ -1,0 +1,34 @@
+{
+ "n_series": 14,
+ "horizon": 24,
+ "origins_per_series": 28,
+ "seed": 0,
+ "models": {
+  "naive24": {
+   "mase_median": 1.156762334538291,
+   "mase_mean": 1.3254285795589347,
+   "beats_naive168_frac": 0.5
+  },
+  "naive168": {
+   "mase_median": 1.1318676319623626,
+   "mase_mean": 1.2158846476950083,
+   "beats_naive168_frac": 0.0
+  },
+  "ets": {
+   "mase_median": 1.2791183110591626,
+   "mase_mean": 1.4753608962110525,
+   "beats_naive168_frac": 0.2857142857142857
+  },
+  "gbm_once": {
+   "mase_median": 1.0770804772987455,
+   "mase_mean": 1.219533912696922,
+   "beats_naive168_frac": 0.7857142857142857
+  },
+  "gbm_refit": {
+   "mase_median": 1.0741108913957755,
+   "mase_mean": 1.2216656193289679,
+   "beats_naive168_frac": 0.7857142857142857
+  }
+ },
+ "refit_gain": 0.002969585902969918
+}
