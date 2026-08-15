@@ -83,7 +83,7 @@ and interval calibration stays there.
 
 ## 6. Both premises, measured and lost
 
-Milestone 3 ran four model families under a rolling origin — 15 meters, 28
+Milestone 3 ran four model families under a rolling origin — 14 meters, 28
 origins each, 24h ahead:
 
 | model | MASE median | beats seasonal naive |
@@ -126,7 +126,7 @@ Milestone 2 and Milestone 3 both report MASE and the numbers differ a lot
 |---|---|---|
 | test window | last 20% (~291 days) | last 28 days |
 | denominator | in-sample on first 80% | in-sample before the first origin |
-| series | 40 | 15 |
+| series | 40 | 14 |
 
 Different window, different denominator, different sample. I nearly wrote a
 paragraph explaining "why the model got worse", which would have been inventing

@@ -82,7 +82,7 @@ metric; the confounded ones are in [NOTES.md](NOTES.md).
 
 ## Real models, under a rolling origin
 
-15 meters, 28 origins each, forecasting 24 hours from every origin. Each model
+14 meters, 28 origins each, forecasting 24 hours from every origin. Each model
 sees only data before its origin — enforced by the harness handing over a prefix
 slice, not by remembering to shift correctly.
 
@@ -131,7 +131,7 @@ nothing measurable.
 
 Milestone 2 scored the last 20% of every series (about 291 days) with a MASE
 denominator from the first 80%. Milestone 3 scores the last 28 days with a
-denominator from everything before them, on 15 meters rather than 40. Different
+denominator from everything before them, on 14 meters rather than 40. Different
 window, different denominator, different sample. Comparing 0.72 against 1.08 and
 concluding something changed would be wrong — the split/horizon comparison is
 internally consistent, and so is the model comparison, but not with each other.
