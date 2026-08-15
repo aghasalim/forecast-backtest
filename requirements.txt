@@ -1,0 +1,4 @@
+# Hosted demo only. It reads committed run artefacts from reports/, so it needs
+# neither the 711 MB dataset nor a modelling stack.
+streamlit>=1.40
+pandas>=2.2
