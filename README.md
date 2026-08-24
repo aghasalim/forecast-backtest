@@ -23,6 +23,14 @@ Holding the model, features and rows fixed and changing one factor at a time:
 | random split → temporal split (h=1) | **+4.1%** |
 | horizon 1h → 24h (random split) | **+42.1%** |
 
+![the 2x2: split barely moves the score, horizon moves it ten times more](reports/backtest.png)
+
+Left is the full 2×2. The two split lines nearly overlap at both horizons, and
+they climb together — the leakage everyone warns about is the small gap between
+them, while the thing that actually decides the score is how far ahead you are
+asked to predict. Redrawn from `reports/backtest.json` by `python -m fb.figures`,
+so it cannot drift from the table above it.
+
 The split moves the score by 4%. The forecast horizon moves it by 42%, ten
 times more. The interpolation arithmetic is correct and the conclusion I drew
 from it was wrong: with strictly past-lag features the model never gets to
