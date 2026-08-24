@@ -25,6 +25,7 @@ jobs:
           uv run python src/fb/backtest.py --self-check
           uv run python src/fb/models.py --self-check
           uv run python src/fb/harness.py --self-check
+          uv run python src/fb/figures.py --self-check
 
       - name: lint
         run: uv run ruff check src

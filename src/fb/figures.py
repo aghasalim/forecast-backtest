@@ -11,6 +11,7 @@ ten times further.
 
 from __future__ import annotations
 
+import argparse
 import json
 from pathlib import Path
 
@@ -64,7 +65,7 @@ def factorial(out: Path) -> Path:
         ("split\nrandom -> temporal", data["effect_of_split"] / baseline * 100, "#9ecae1"),
         ("horizon\n1h -> 24h", data["effect_of_horizon"] / baseline * 100, "#b2182b"),
     ]
-    for index, (label, percent, colour) in enumerate(effects):
+    for index, (_label, percent, colour) in enumerate(effects):
         right.bar(index, percent, 0.55, color=colour, edgecolor="0.3", lw=0.5)
         right.text(
             index, percent + 1.2, f"+{percent:.1f}%",
@@ -92,7 +93,36 @@ def factorial(out: Path) -> Path:
     return out
 
 
+def demo() -> None:
+    """Check the arithmetic the figure prints, not that matplotlib runs.
+
+    The two percentages and the ratio in the titles are derived here rather than
+    typed, so the thing worth asserting is that they still agree with the cells
+    they are derived from.
+    """
+    data = json.loads((REPORTS / "backtest.json").read_text())
+    cells, baseline = data["cells"], data["baseline_mase"]
+
+    # effect_of_split and effect_of_horizon must be the differences they claim.
+    split = cells["temporal_h1"]["mase_median"] - cells["random_h1"]["mase_median"]
+    horizon = cells["random_h24"]["mase_median"] - cells["random_h1"]["mase_median"]
+    assert abs(split - data["effect_of_split"]) < 1e-9, "split effect is not the h=1 gap"
+    assert abs(horizon - data["effect_of_horizon"]) < 1e-9, "horizon effect is not the random-split gap"
+    assert abs(baseline - cells["random_h1"]["mase_median"]) < 1e-9, "baseline is not the random h=1 cell"
+
+    # The README quotes +4.1% and +42.1% against that baseline.
+    assert abs(split / baseline * 100 - 4.1) < 0.1, split / baseline * 100
+    assert abs(horizon / baseline * 100 - 42.1) < 0.1, horizon / baseline * 100
+    assert horizon > split * 5, "the whole point is that the horizon dominates"
+    print("self-check ok")
+
+
 def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--self-check", action="store_true")
+    if parser.parse_args().self_check:
+        demo()
+        return
     print(f"wrote {factorial(REPORTS / 'backtest.png').relative_to(REPORTS.parent)}")
 
 
