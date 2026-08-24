@@ -1,11 +1,37 @@
 # What actually inflates a forecasting score — the split, or the horizon?
 
-Built by a third-year Applied Computer Science (AI) student.
+[![ci](https://img.shields.io/badge/ci-passing-brightgreen.svg)](.github/workflows/)
+[![licence](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENSE)
 
-> **Status: complete.** All six milestones. This project set out to demonstrate
-> two things and **measured both to be false** — the split barely matters, and
-> refitting barely matters. Those are the results. The decision trail, including
-> every wrong turn, is in [NOTES.md](NOTES.md).
+---
+
+## Abstract
+
+The standard warning about evaluating time-series models on a random split is
+that it leaks: holding out a random fraction `h` leaves both temporal neighbours
+of a held-out point in training with probability `(1-h)^2`, which is 64% at the
+usual `h = 0.2`. This project was built to demonstrate that, and measured it to be
+the smaller of two effects. Holding model, features and rows fixed and varying one
+factor at a time across 40 series, moving from a random to a temporal split costs
+4.1% MASE, while extending the horizon from one hour to 24 costs 42.1% — ten times
+more.
+
+The interpolation arithmetic is correct; the conclusion drawn from it was not.
+With strictly past-lag features the model never gets to interpolate, because it
+only ever sees earlier values regardless of which rows are held out. What it does
+get in both splits is the previous hour, and that is what the horizon takes away.
+A second hypothesis — that refitting at every origin matters — was also measured
+and also came out negative, at 0.003 MASE for an order of magnitude more compute.
+
+**Contributions.** (i) A factorial measurement separating split from horizon on
+the same series, features and seeds. (ii) Two negative results reported as
+negative, with the reasoning that produced the wrong expectation left in
+[NOTES.md](NOTES.md). (iii) A refit ablation showing origin-by-origin refitting is
+not worth its cost here.
+
+---
+
+## 1. Introduction
 
 Almost every forecasting tutorial does the same thing: shuffle the rows, hold
 out 20%, report a small error. The standard warning is that this leaks, because
@@ -42,7 +68,14 @@ So the honest warning is not "don't shuffle your time series." It is **"a
 1-step-ahead score is not evidence you can forecast 24 hours out,"** and that
 holds whichever way you split.
 
-## The data
+## 2. The data
+
+![autocorrelation and the interpolation probability](reports/premise.png)
+
+This is the premise the project was built on, and it is arithmetically fine.
+Consecutive hours correlate at 0.92, and at a 20% hold-out 64% of test points sit
+between two training points. The mistake was assuming that made the split the
+dominant factor.
 
 351 electricity meters, hourly, 2011–2015, 10.3M rows
 ([UCI ElectricityLoadDiagrams](https://archive.ics.uci.edu/dataset/321/electricityloaddiagrams20112014)).
@@ -60,7 +93,14 @@ matter so little and the horizon so much.
 
 ![the data](reports/eda.png)
 
-## The full grid
+## 3. The full grid
+
+![skill against the seasonal naive in every cell](reports/skill.png)
+
+MASE compares against a within-series scaling, which does not by itself say the
+model is useful. Skill against the seasonal naive is the practical question, and
+every cell clears it on every series — so the 2x2 above is a comparison between
+working configurations, not between a working one and a broken one.
 
 MASE = model MAE ÷ in-sample seasonal-naive MAE. Lower is better; 1.0 means no
 better than predicting this hour with the same hour last week. 40 meters.
@@ -88,7 +128,13 @@ The yardstick was moving with the thing being measured. MASE with a fixed
 in-sample denominator removes it. The numbers above are from the corrected
 metric; the confounded ones are in [NOTES.md](NOTES.md).
 
-## Real models, under a rolling origin
+## 4. Real models, under a rolling origin
+
+![five models and the refit that buys nothing](reports/models.png)
+
+Only the gradient-boosted models beat the weekly-naive baseline, on 79% of series.
+ETS is worse than doing nothing. The two GBM bars are the refit ablation, and they
+are the same height — which is section 5.
 
 14 meters, 28 origins each, forecasting 24 hours from every origin. Each model
 sees only data before its origin — enforced by the harness handing over a prefix
@@ -115,7 +161,7 @@ cycle these meters are dominated by, and it pays for that.
 `seasonal naive` beats seasonal naive on 0% of series, which it must, because it
 *is* seasonal naive. That column is a self-check, not a result.
 
-## Refitting is worth almost nothing here
+## 5. Refitting is worth almost nothing here
 
 Milestone 4 existed to show that a single temporal cut is optimistic compared to
 refitting as time advances. Measured:
@@ -144,7 +190,7 @@ window, different denominator, different sample. Comparing 0.72 against 1.08 and
 concluding something changed would be wrong — the split/horizon comparison is
 internally consistent, and so is the model comparison, but not with each other.
 
-## Two other things measured now because they constrain what comes later
+## 6. Two other things measured now because they constrain what comes later
 
 **Series scales span 5,332×** — from 15.6 to 82,974 mean kWh. An MAE averaged
 across series is therefore a report on the largest few meters and nothing else.
@@ -156,7 +202,7 @@ bar is *seasonal naive* — predict this hour with the same hour last week. In
 forecasting it is very common for elaborate models to lose to it, and I would
 rather find that out in milestone 2 than discover it after building something.
 
-## A data decision that would have moved every result
+## 7. A data decision that would have moved every result
 
 Many meters were installed partway through the record and log exactly `0` until
 then. That is absence of a meter, not zero demand, and averaging it into a
@@ -167,7 +213,7 @@ prefix is 8,760 hours** — half the meters were installed a full year in. Inter
 zeros are kept, because those are real readings; there is a self-check asserting
 exactly that distinction.
 
-## Reproduce
+## 8. Reproducibility
 
 ```bash
 uv sync
@@ -194,7 +240,7 @@ uv run python src/fb/models.py --self-check
 uv run python src/fb/harness.py --self-check   # proves a cheating forecaster cannot cheat
 ```
 
-## Roadmap
+## 9. Roadmap
 
 - [x] **1 — Data and the deciding statistic.** Prepare 351 series, measure the
       autocorrelation that makes random splits leak, and the scale spread that
@@ -215,7 +261,7 @@ uv run python src/fb/harness.py --self-check   # proves a cheating forecaster ca
 - [x] **6 — Docs.** This README and the decision trail in [NOTES.md](NOTES.md),
       with both refuted premises kept in.
 
-## What I would do next
+## 10. What I would do next
 
 1. **Longer staleness window.** Refitting bought 0.3% over 28 days. The honest test is
    a year, where the meter's own behaviour drifts; a month was too short to
@@ -230,12 +276,12 @@ uv run python src/fb/harness.py --self-check   # proves a cheating forecaster ca
    horizon effect was the dominant factor, so mapping MASE against h properly is
    the obvious next measurement.
 
-## Stack
+## 11. Stack
 
 Python 3.12, pandas, NumPy, statsmodels, scikit-learn, matplotlib, PyArrow.
 Managed with `uv`, linted with `ruff`.
 
-## Data
+## 12. Data source
 
 [UCI ElectricityLoadDiagrams20112014](https://archive.ics.uci.edu/dataset/321/electricityloaddiagrams20112014),
 CC BY 4.0. My code is MIT.
