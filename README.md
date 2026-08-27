@@ -168,3 +168,12 @@ Managed with`uv`, linted with`ruff`.
 
 [UCI ElectricityLoadDiagrams20112014](https://archive.ics.uci.edu/dataset/321/electricityloaddiagrams20112014),
 CC BY 4.0. My code is MIT.
+
+## References
+
+The papers and sources this implementation follows. Each one is here because
+the code uses the method, the dataset or the metric it describes.
+
+- **Hyndman, Koehler. Another look at measures of forecast accuracy. International Journal of Forecasting 22, 2006.** MASE, the scale free error measure used throughout.
+- **Hyndman, Athanasopoulos. Forecasting: Principles and Practice, 3rd edition. OTexts, 2021.** ETS and ARIMA, and the rolling origin evaluation this implements.
+- **Bergmeir, Benítez. On the use of cross-validation for time series predictor evaluation. Information Sciences 191, 2012.** why ordinary cross validation is wrong here.
