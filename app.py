@@ -1,7 +1,7 @@
 """Demo: what actually inflates a forecasting score.
 
-This project was named after a claim — that shuffling a time series is what
-flatters your model — and then measured it and found the claim mostly wrong.
+This project was named after a claim, that shuffling a time series is what
+flatters your model, and then measured it and found the claim mostly wrong.
 The app exists to let you see that rather than take my word for it: the grid is
 the real measured output, and the two factors can be toggled independently.
 
@@ -32,7 +32,7 @@ def load(name: str) -> dict | None:
 grid = load("backtest.json")
 models = load("models.json")
 
-st.title("📉 What actually inflates a forecasting score?")
+st.title("What actually inflates a forecasting score?")
 st.caption(
     "351 electricity meters, hourly. MASE is model error ÷ in-sample "
     "seasonal-naive error: lower is better, 1.0 means no better than predicting "
@@ -78,8 +78,8 @@ if grid:
         f"Changing the horizon costs {grid['effect_of_horizon'] / base:+.1%}.** "
         "The horizon matters about ten times more than the thing this repo was "
         "originally named after. With strictly past-lag features the model never "
-        "interpolates — it only ever sees earlier values, whichever rows are held "
-        "out — so shuffling hands it nothing it did not already have."
+        "interpolates, it only ever sees earlier values, whichever rows are held "
+        "out, so shuffling hands it nothing it did not already have."
     )
 
 if models:
@@ -88,7 +88,7 @@ if models:
     st.write(
         f"{models['n_series']} meters, {models['origins_per_series']} origins each, "
         f"forecasting {models['horizon']}h from every origin. Each model sees only "
-        "data before its origin — enforced by the harness handing over a prefix "
+        "data before its origin, enforced by the harness handing over a prefix "
         "slice, not by remembering to be careful."
     )
     rows = [{"model": k,

@@ -34,10 +34,6 @@ import argparse
 import json
 from pathlib import Path
 
-import matplotlib
-
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
@@ -94,34 +90,7 @@ def run(sample_series: int = 60, seed: int = 0) -> dict:
     }
     REPORTS.mkdir(exist_ok=True)
     (REPORTS / "eda.json").write_text(json.dumps(out, indent=1))
-    figure(df, pick[:1][0], acf, out)
     return out
-
-
-def figure(df: pd.DataFrame, one: str, acf: dict, out: dict) -> None:
-    fig, ax = plt.subplots(1, 3, figsize=(16, 4.2))
-
-    s = df[df.series == one].set_index("timestamp").kwh
-    s.iloc[: 24 * 21].plot(ax=ax[0])
-    ax[0].set_title(f"{one}: three weeks\ndaily and weekly cycles")
-    ax[0].set_ylabel("kWh")
-
-    ax[1].boxplot([np.array(v)[~np.isnan(v)] for v in acf.values()],
-                  tick_labels=list(acf))
-    ax[1].axhline(0.9, color="#c0392b", ls="--", label="0.9")
-    ax[1].set_title("autocorrelation across series\n(lag-1 is why random splits leak)")
-    ax[1].legend()
-
-    prof = (df.assign(hour=df.timestamp.dt.hour)
-              .groupby("hour").kwh.mean())
-    ax[2].plot(prof.index, prof.to_numpy(), "o-")
-    ax[2].set_title("mean load by hour of day")
-    ax[2].set_xlabel("hour")
-
-    fig.suptitle("Electricity load, 351 meters, hourly")
-    fig.tight_layout()
-    fig.savefig(REPORTS / "eda.png", dpi=110)
-    plt.close(fig)
 
 
 def main() -> None:
