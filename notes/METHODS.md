@@ -6,7 +6,7 @@ Long form detail moved out of the README.
 ## 2. The data
 
 
-![autocorrelation and the interpolation probability](reports/premise.png)
+![autocorrelation and the interpolation probability](../reports/premise.png)
 
 This is the premise the project was built on, and it is arithmetically fine.
 Consecutive hours correlate at 0.92, and at a 20% hold-out 64% of test points sit
@@ -27,13 +27,13 @@ forecast easy, the previous hour is nearly the answer, and it is available to
 the model under *either* split, which is precisely why the split turned out to
 matter so little and the horizon so much.
 
-![the data](reports/eda.png)
+![the data](../reports/eda.png)
 
 
 ## 3. The full grid
 
 
-![skill against the seasonal naive in every cell](reports/skill.png)
+![skill against the seasonal naive in every cell](../reports/skill.png)
 
 MASE compares against a within-series scaling, which does not by itself say the
 model is useful. Skill against the seasonal naive is the practical question, and
@@ -61,7 +61,7 @@ rather than merely plausible.
 ## 4. Real models, under a rolling origin
 
 
-![five models and the refit that buys nothing](reports/models.png)
+![five models and the refit that buys nothing](../reports/models.png)
 
 Only the gradient-boosted models beat the weekly-naive baseline, on 79% of series.
 ETS is worse than doing nothing. The two GBM bars are the refit ablation, and they
