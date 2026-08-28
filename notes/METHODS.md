@@ -148,7 +148,7 @@ rather find that out in milestone 2 than discover it after building something.
 - [x] **5, Deployment.** A backtester that hands each model a prefix slice, so
       leaking the future is impossible by construction; plus a Streamlit demo
       and Docker image.
-- [x] **6, Docs.** This README and the decision trail in [NOTES.md](NOTES.md),
+- [x] **6, Docs.** This README and the decision trail in [NOTES.md](../NOTES.md),
       with both refuted premises kept in.
 
 
