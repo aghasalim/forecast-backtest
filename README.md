@@ -1,6 +1,6 @@
 # What actually inflates a forecasting score, the split, or the horizon?
 
-[![ci](https://img.shields.io/badge/ci-passing-brightgreen.svg)](.github/workflows/)
+[![ci](https://github.com/aghasalim/forecast-backtest/actions/workflows/ci.yml/badge.svg)](https://github.com/aghasalim/forecast-backtest/actions/workflows/ci.yml)
 [![licence](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENSE)
 
 ---
