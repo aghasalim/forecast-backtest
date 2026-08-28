@@ -7,11 +7,11 @@ bottom. Ground rule: **no number in this file that I did not personally run.**
 
 ## 1. Naming the project after a claim I had not tested
 
-I called this repo`forecast-backtest` and titled the README "How you split the
+I called this repo `forecast-backtest` and titled the README "How you split the
 data decides the score", because that is the standard warning about time series
-and the arithmetic supporting it is real: hold out a random fraction`h` and the
-chance both neighbours of a held-out point remain in training is`(1 - h)²`, or
-64% at`h = 0.2`.
+and the arithmetic supporting it is real: hold out a random fraction `h` and the
+chance both neighbours of a held-out point remain in training is `(1 - h)²`, or
+64% at `h = 0.2`.
 
 Milestone 1 then measured lag-1 autocorrelation at **0.9213**, which I took as
 confirmation. It is not confirmation of anything, it is consistent with the
@@ -19,13 +19,13 @@ claim, which is a different thing.
 
 ## 2. The parse that silently did nothing
 
-`LD2011_2014.txt` is semicolon-separated with`,` as the decimal point. Read
-with defaults, every value becomes a string and nothing errors.`prepare.py`
+`LD2011_2014.txt` is semicolon-separated with `,` as the decimal point. Read
+with defaults, every value becomes a string and nothing errors. `prepare.py`
 asserts every column is numeric after parsing, because a silent type downgrade
 that only explodes three steps downstream is worse than a crash.
 
 Also measured before discarding: meters installed partway through the record log
-exactly`0` beforehand. Median trimmed prefix is **8,760 hours**: a full year.
+exactly `0` beforehand. Median trimmed prefix is **8,760 hours**: a full year.
 Interior zeros are real readings and are kept; the self-check asserts both.
 
 ## 3. Testing the claim, and losing
@@ -111,7 +111,7 @@ re-estimated at every origin, which was not affordable here.
 show that a single temporal cut flatters you relative to refitting as time
 advances. It does not, 0.3% for 28x the compute. Second premise, also wrong.
 
-The one I should have seen coming:`seasonal naive` beats seasonal naive on 0%
+The one I should have seen coming: `seasonal naive` beats seasonal naive on 0%
 of series. It cannot beat itself. I left that column in because a metric that
 returns the impossible when you feed it a known answer is the cheapest sanity
 check available, and this one passed.
@@ -135,16 +135,16 @@ instead.
 ## 8. What the harness is for
 
 Every number here rests on no model having seen data at or after its origin.
-Milestone 2 achieved that with careful`.shift()` arithmetic, which is the kind
+Milestone 2 achieved that with careful `.shift()` arithmetic, which is the kind
 of correctness that lasts until someone edits it.
 
-So the harness does not ask for care. It hands the forecaster`y[:origin]` and
+So the harness does not ask for care. It hands the forecaster `y[:origin]` and
 nothing else, and the self-check proves the guarantee rather than asserting it:
 a forecaster that tries to index past its history raises IndexError, and one
 that zeroes its input cannot corrupt the caller's series. It also refuses to
 return a number when the setup cannot support one, too few origins, too little
 history, or a constant series where MASE is undefined.
 
-That is the same shape as the gate in`recsys-offline-online`: the useful
+That is the same shape as the gate in `recsys-offline-online`: the useful
 artefact is not a better estimate, it is a thing that will not hand you a
 number it cannot stand behind.

@@ -8,9 +8,9 @@
 ## Abstract
 
 The standard warning about evaluating time-series models on a random split is
-that it leaks: holding out a random fraction`h` leaves both temporal neighbours
-of a held-out point in training with probability`(1-h)^2`, which is 64% at the
-usual`h = 0.2`. This project was built to demonstrate that, and measured it to be
+that it leaks: holding out a random fraction `h` leaves both temporal neighbours
+of a held-out point in training with probability `(1-h)^2`, which is 64% at the
+usual `h = 0.2`. This project was built to demonstrate that, and measured it to be
 the smaller of two effects. Holding model, features and rows fixed and varying one
 factor at a time across 40 series, moving from a random to a temporal split costs
 4.1% MASE, while extending the horizon from one hour to 24 costs 42.1%, ten times
@@ -35,8 +35,8 @@ not worth its cost here.
 
 Almost every forecasting tutorial does the same thing: shuffle the rows, hold
 out 20%, report a small error. The standard warning is that this leaks, because
-if you hold out a random fraction`h`, the chance that **both** neighbours of a
-held-out point are still in training is`(1 - h)²`, **64%** at the usual
+if you hold out a random fraction `h`, the chance that **both** neighbours of a
+held-out point are still in training is `(1 - h)²`, **64%** at the usual
 `h = 0.2`. Two thirds of your test set sits between two known values.
 
 I built this project to demonstrate that. **Then I measured it, and it is not
@@ -54,7 +54,7 @@ Holding the model, features and rows fixed and changing one factor at a time:
 Left is the full 2×2. The two split lines nearly overlap at both horizons, and
 they climb together, the leakage everyone warns about is the small gap between
 them, while the thing that actually decides the score is how far ahead you are
-asked to predict. Redrawn from`reports/backtest.json` by`python -m fb.figures`,
+asked to predict. Redrawn from `reports/backtest.json` by `python -m fb.figures`,
 so it cannot drift from the table above it.
 
 The split moves the score by 4%. The forecast horizon moves it by 42%, ten
@@ -115,7 +115,7 @@ internally consistent, and so is the model comparison, but not with each other.
 Full detail in [notes/METHODS.md](notes/METHODS.md#6-two-other-things-measured-now-because-they-constrain-what-comes-later).
 ## 7. A data decision that would have moved every result
 
-Many meters were installed partway through the record and log exactly`0` until
+Many meters were installed partway through the record and log exactly `0` until
 then. That is absence of a meter, not zero demand, and averaging it into a
 baseline drags the baseline down invisibly.
 
@@ -162,7 +162,7 @@ Full detail in [notes/METHODS.md](notes/METHODS.md#10-what-i-would-do-next).
 ## 11. Stack
 
 Python 3.12, pandas, NumPy, statsmodels, scikit-learn, matplotlib, PyArrow.
-Managed with`uv`, linted with`ruff`.
+Managed with `uv`, linted with `ruff`.
 
 ## 12. Data source
 
