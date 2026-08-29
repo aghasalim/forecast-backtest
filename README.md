@@ -70,6 +70,10 @@ holds whichever way you split.
 
 ## 2. The data
 This is the premise the project was built on, and it is arithmetically fine.
+351 meters record hourly kWh from 2011 to 2015, which is 10.3M rows after
+preparation. Consecutive hours correlate at 0.92, so at a 20% hold-out 64% of
+test points really do sit between two training points. The arithmetic holds.
+What it does not do is make the split the factor that decides the score.
 
 ![autocorrelation and the interpolation probability](reports/premise.png)
 ![the data](reports/eda.png)
@@ -77,6 +81,11 @@ This is the premise the project was built on, and it is arithmetically fine.
 Full detail in [notes/METHODS.md](notes/METHODS.md#2-the-data).
 ## 3. The full grid
 MASE compares against a within-series scaling, which does not by itself say the model is useful.
+The four cells run from 0.4843 MASE (random split, one hour ahead) to 0.7217
+(temporal split, 24 hours ahead), a spread of 49%, and the horizon accounts for
+almost all of it. Every cell beats the seasonal naive on 100% of the 40 series,
+so this is a comparison between working configurations, not between a working
+one and a broken one.
 
 ![skill against the seasonal naive in every cell](reports/skill.png)
 
@@ -92,12 +101,22 @@ metric; the confounded ones are in [NOTES.md](NOTES.md).
 
 ## 4. Real models, under a rolling origin
 Only the gradient-boosted models beat the weekly-naive baseline, on 79% of series.
+Across 14 meters and 28 origins each, gradient boosting lands at 1.0771 median
+MASE and ETS at 1.2791, which is worse than repeating last week. Every model
+here scores above 1.0. That is not because they lose to seasonal naive on the
+same rows, it is because the final 28 days are harder than the training period
+the denominator was computed on.
 
 ![five models and the refit that buys nothing](reports/models.png)
 
 Full detail in [notes/METHODS.md](notes/METHODS.md#4-real-models-under-a-rolling-origin).
 ## 5. Refitting is worth almost nothing here
 Milestone 4 existed to show that a single temporal cut is optimistic compared to refitting as time advances.
+Refitting at all 28 origins scores 1.0741 median MASE against 1.0771 for fitting
+once and letting the model age. That is 0.0030 MASE, or 0.3%, for 28 times the
+compute. A month is not long enough for a model built on recent lag features to
+go stale, so the retraining pipeline can be dropped here without losing anything
+measurable.
 
 Full detail in [notes/METHODS.md](notes/METHODS.md#5-refitting-is-worth-almost-nothing-here).
 ### These numbers are not comparable to the grid above
@@ -110,7 +129,12 @@ concluding something changed would be wrong, the split/horizon comparison is
 internally consistent, and so is the model comparison, but not with each other.
 
 ## 6. Two other things measured now because they constrain what comes later
-**Series scales span 5,332×**: from 15.6 to 82,974 mean kWh.
+**Series scales span 5,332×**: from 15.6 to 82,974 mean kWh. An MAE averaged
+over series would report on the largest few meters and nothing else, so a
+scale-free error is a requirement here. The second measurement is that daily and
+weekly autocorrelation are both about 0.9, which fixes the bar at seasonal
+naive, predicting this hour with the same hour last week, rather than at
+anything simpler.
 
 Full detail in [notes/METHODS.md](notes/METHODS.md#6-two-other-things-measured-now-because-they-constrain-what-comes-later).
 ## 7. A data decision that would have moved every result
@@ -154,9 +178,21 @@ uv run python src/fb/harness.py --self-check   # proves a cheating forecaster ca
 ## 9. Roadmap
 - [x] **1, Data and the deciding statistic.** Prepare 351 series, measure the autocorrelation that makes random splits leak, and the scale spread that makes MASE mandatory.
 
+All six milestones are done. Milestone 2 is the two-factor grid, where the
+horizon beat the split by ten times and the premise the project started from
+turned out to be wrong. Milestone 3 is the five-model rolling-origin comparison
+on 14 meters, and milestone 4 is the refit ablation at +0.3% MASE for 28 times
+the compute. Milestones 5 and 6 are the prefix-slice backtester with the demo,
+and the decision trail in [NOTES.md](NOTES.md) with both refuted premises left in.
+
 Full detail in [notes/METHODS.md](notes/METHODS.md#9-roadmap).
 ## 10. What I would do next
-**Longer staleness window.** Refitting bought 0.3% over 28 days.
+**Longer staleness window.** Refitting bought 0.3% over 28 days. A year is the
+honest test, because that is long enough for a meter's own behaviour to drift.
+After that, a classical model that can hold a 168-hour cycle would be the fair
+comparator, since ETS lost with only 24-period seasonality. Third is per-series
+reporting: the 79% figure implies 21% of meters where boosting loses, and the
+median hides them.
 
 Full detail in [notes/METHODS.md](notes/METHODS.md#10-what-i-would-do-next).
 ## 11. Stack
