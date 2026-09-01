@@ -4,3 +4,8 @@ __pycache__/
 data/
 .env
 .env.local
+
+# Cross-language verification build products. Sources under verify/ are tracked,
+# including verify/fixture/, which is the reference the other languages check.
+verify/foldgrid/target/
+verify/gocheck/gocheck

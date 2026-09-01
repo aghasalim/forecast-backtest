@@ -29,3 +29,40 @@ jobs:
 
       - name: lint
         run: uv run ruff check src
+
+  # Every figure in this repo comes out of one numpy path in src/fb/harness.py.
+  # The tests check that it runs, not that MASE is the number it should be.
+  # These recompute the fold errors, the MASE and the aggregation independently
+  # and require agreement. All of these toolchains ship on the runner image
+  # except R.
+  cross-language:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install R if the image does not carry it
+        run: |
+          command -v Rscript >/dev/null || {
+            sudo apt-get update
+            sudo apt-get install -y --no-install-recommends r-base-core
+          }
+
+      - name: Recompute the metrics in every language
+        run: ./verify/verify.sh
+
+      # A check that cannot fail is not evidence.
+      - name: The harness rejects a corrupted fixture
+        run: |
+          cp verify/fixture/folds.csv /tmp/folds.bak
+          awk -F, 'NR==6{$NF=$NF*1.05; print $1","$2","$3","$NF; next} {print}' \
+              /tmp/folds.bak > verify/fixture/folds.csv
+          if ./verify/verify.sh > /tmp/corrupt.log 2>&1; then
+            echo "the harness passed on a corrupted fixture"
+            tail -30 /tmp/corrupt.log
+            cp /tmp/folds.bak verify/fixture/folds.csv
+            exit 1
+          fi
+          echo "rejected the corrupted fixture, as it should"
+          cp /tmp/folds.bak verify/fixture/folds.csv
+          ./verify/verify.sh > /dev/null
+

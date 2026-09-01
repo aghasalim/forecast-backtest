@@ -1,0 +1,3 @@
+model,series,mase_median,mase_mean,beats_naive_frac
+seasonal_naive,10,0.9489124132530049,0.9537391378501232,0.8
+daily_naive,10,1.525287491781568,1.5087317898295765,0.0
