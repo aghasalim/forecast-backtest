@@ -55,7 +55,9 @@ Left is the full 2×2. The two split lines nearly overlap at both horizons, and
 they climb together, the leakage everyone warns about is the small gap between
 them, while the thing that actually decides the score is how far ahead you are
 asked to predict. Redrawn from `reports/backtest.json` by `python -m fb.figures`,
-so it cannot drift from the table above it.
+so it cannot drift from the table above it. The metrics themselves are
+recomputed independently in `verify/`, by other routes than the numpy path that
+produced them, and CI fails if any recomputation disagrees.
 
 The split moves the score by 4%. The forecast horizon moves it by 42%, ten
 times more. The interpolation arithmetic is correct and the conclusion I drew
@@ -195,46 +197,12 @@ reporting: the 79% figure implies 21% of meters where boosting loses, and the
 median hides them.
 
 Full detail in [notes/METHODS.md](notes/METHODS.md#10-what-i-would-do-next).
-## 11. Every metric is computed twice
-
-Every number in this repository comes out of one numpy path in
-`src/fb/harness.py`: one expression for the seasonal naive denominator, one for
-the fold errors, one mean of means. The tests check that path runs. They do not
-check that MASE is the number MASE should be, and a backtest is exactly the kind
-of code where an off-by-one in the fold slicing produces a plausible answer.
-
-So the metrics are recomputed by six implementations in six languages against a
-fixture exported by [`verify/make_fixture.py`](verify/make_fixture.py), and CI
-fails if any disagrees.
-
-| implementation | what it recomputes | agreement |
-| --- | --- | --- |
-| [`verify/mase.sql`](verify/mase.sql) | 59 fold errors, MASEs and aggregates, joins instead of array slicing | exact |
-| [`verify/mase.c`](verify/mase.c) | every fold error, MASE and aggregate | to 1e-12 |
-| [`verify/gocheck`](verify/gocheck) | every file in `reports/`, and that no fold trains on data after its origin | structural |
-| [`verify/verify.R`](verify/verify.R) | the metric and the autocorrelation premise the repo rests on | base R |
-| [`verify/foldgrid`](verify/foldgrid) | every fold layout, by simulation | exhaustive |
-| [`verify/reports.mjs`](verify/reports.mjs) | every derived field, and every figure quoted in the prose | exact |
-
-Run them with [`./verify/verify.sh`](verify/verify.sh). Each is skipped with a
-message if its toolchain is absent.
-
-The SQL matters more than it looks. It has none of numpy's vectorised
-shortcuts, so reaching the same answer through joins means each forecast is
-lined up with the observation it was supposed to predict, independently of how
-the Python sliced its arrays. That is the error this repo is actually exposed to.
-
-Scaling one fold error by 5 percent is rejected by two implementations, and
-changing one published float in `reports/backtest.json` is rejected by three.
-CI does that to itself on every run: it corrupts the fixture, requires the
-harness to reject it, restores it and requires a pass.
-
-## 12. Stack
+## 11. Stack
 
 Python 3.12, pandas, NumPy, statsmodels, scikit-learn, matplotlib, PyArrow.
 Managed with `uv`, linted with `ruff`.
 
-## 13. Data source
+## 12. Data source
 
 [UCI ElectricityLoadDiagrams20112014](https://archive.ics.uci.edu/dataset/321/electricityloaddiagrams20112014),
 CC BY 4.0. My code is MIT.
