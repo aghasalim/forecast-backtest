@@ -210,8 +210,8 @@ CC BY 4.0. My code is MIT.
 
 ## References
 
-The papers and sources this implementation follows. Each one is here because
-the code uses the method, the dataset or the metric it describes.
+Three sources, one per moving part: where the error measure comes from, where
+the models come from, and why the evaluation rolls forward instead of shuffling.
 
 - **Hyndman, Koehler. Another look at measures of forecast accuracy. International Journal of Forecasting 22, 2006.** MASE, the scale free error measure used throughout.
 - **Hyndman, Athanasopoulos. Forecasting: Principles and Practice, 3rd edition. OTexts, 2021.** ETS and ARIMA, and the rolling origin evaluation this implements.
