@@ -113,7 +113,7 @@ the denominator was computed on.
 
 Full detail in [notes/METHODS.md](notes/METHODS.md#4-real-models-under-a-rolling-origin).
 ## 5. Refitting is worth almost nothing here
-Milestone 4 existed to show that a single temporal cut is optimistic compared to refitting as time advances.
+This section asks whether a single temporal cut is optimistic compared to refitting as time advances.
 Refitting at all 28 origins scores 1.0741 median MASE against 1.0771 for fitting
 once and letting the model age. That is 0.0030 MASE, or 0.3%, for 28 times the
 compute. A month is not long enough for a model built on recent lag features to
@@ -123,8 +123,8 @@ measurable.
 Full detail in [notes/METHODS.md](notes/METHODS.md#5-refitting-is-worth-almost-nothing-here).
 ### These numbers are not comparable to the grid above
 
-Milestone 2 scored the last 20% of every series (about 291 days) with a MASE
-denominator from the first 80%. Milestone 3 scores the last 28 days with a
+The grid in section 3 scored the last 20% of every series (about 291 days) with a
+MASE denominator from the first 80%. Section 4 scores the last 28 days with a
 denominator from everything before them, on 14 meters rather than 40. Different
 window, different denominator, different sample. Comparing 0.72 against 1.08 and
 concluding something changed would be wrong, the split/horizon comparison is
@@ -180,12 +180,13 @@ uv run python src/fb/harness.py --self-check   # proves a cheating forecaster ca
 ## 9. Roadmap
 - [x] **1, Data and the deciding statistic.** Prepare 351 series, measure the autocorrelation that makes random splits leak, and the scale spread that makes MASE mandatory.
 
-All six milestones are done. Milestone 2 is the two-factor grid, where the
+Everything on the roadmap is done. Section 3 is the two-factor grid, where the
 horizon beat the split by ten times and the premise the project started from
-turned out to be wrong. Milestone 3 is the five-model rolling-origin comparison
-on 14 meters, and milestone 4 is the refit ablation at +0.3% MASE for 28 times
-the compute. Milestones 5 and 6 are the prefix-slice backtester with the demo,
-and the decision trail in [NOTES.md](NOTES.md) with both refuted premises left in.
+turned out to be wrong. Section 4 is the five-model rolling-origin comparison on
+14 meters, and section 5 is the refit ablation at +0.3% MASE for 28 times the
+compute. The rest is the prefix-slice backtester in `src/fb/harness.py` with the
+demo, and the decision trail in [NOTES.md](NOTES.md) with both refuted premises
+left in.
 
 Full detail in [notes/METHODS.md](notes/METHODS.md#9-roadmap).
 ## 10. What I would do next

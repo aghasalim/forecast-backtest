@@ -1,4 +1,4 @@
-"""Milestone 2 - which choice actually inflates a forecasting score?
+"""Which choice actually inflates a forecasting score?
 
 The README claims that a random train/test split flatters a forecaster. That is
 the standard warning, and I wrote it before testing it. Thinking it through, it
@@ -19,7 +19,7 @@ error is the one worth warning people about.
 Everything is scored against SEASONAL NAIVE on the same rows - predict this
 hour with the same hour last week. A forecaster that cannot beat that has not
 earned its complexity, and reporting raw MAE hides it. Because meter scales
-span 5,332x (milestone 1), errors are aggregated as a skill ratio per series
+span 5,332x (measured in eda.py), errors are aggregated as a skill ratio per series
 and then averaged, never as a pooled MAE, which would just report on the
 largest meters.
 """

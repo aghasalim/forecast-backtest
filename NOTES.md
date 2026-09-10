@@ -13,7 +13,7 @@ and the arithmetic supporting it is real: hold out a random fraction `h` and the
 chance both neighbours of a held-out point remain in training is `(1 - h)²`, or
 64% at `h = 0.2`.
 
-Milestone 1 then measured lag-1 autocorrelation at **0.9213**, which I took as
+The exploratory pass then measured lag-1 autocorrelation at **0.9213**, which I took as
 confirmation. It is not confirmation of anything, it is consistent with the
 claim, which is a different thing.
 
@@ -75,14 +75,14 @@ scores MASE **1.0030** at h=1, and it must be ~1.0 by construction because it
 
 ## 5. Scope, against a neighbouring project
 
-`m4-forecasting` already covers prediction-interval coverage. Milestone 4 here
-was originally going to do the same thing, which would have been padding. This
+`m4-forecasting` already covers prediction-interval coverage. The refit ablation
+here was originally going to do the same thing, which would have been padding. This
 project is the evaluation-protocol question, which factor inflates a score
 and interval calibration stays there.
 
 ## 6. Both premises, measured and lost
 
-Milestone 3 ran four model families under a rolling origin, 14 meters, 28
+The model comparison ran four model families under a rolling origin, 14 meters, 28
 origins each, 24h ahead:
 
 | model | MASE median | beats seasonal naive |
@@ -107,8 +107,8 @@ thing that matters. That is a limitation of my configuration, not of ETS, and
 the README says so, weekly seasonality on hourly data is a 168-state component
 re-estimated at every origin, which was not affordable here.
 
-**Refitting daily for a month is worth +0.0030 MASE.** Milestone 4 existed to
-show that a single temporal cut flatters you relative to refitting as time
+**Refitting daily for a month is worth +0.0030 MASE.** The refit ablation existed
+to show that a single temporal cut flatters you relative to refitting as time
 advances. It does not, 0.3% for 28x the compute. Second premise, also wrong.
 
 The one I should have seen coming: `seasonal naive` beats seasonal naive on 0%
@@ -118,10 +118,10 @@ check available, and this one passed.
 
 ## 7. Two experiments that must not be compared
 
-Milestone 2 and Milestone 3 both report MASE and the numbers differ a lot
+The grid and the model comparison both report MASE and the numbers differ a lot
 (0.72 vs 1.08 for broadly similar setups). They are not comparable:
 
-|  | milestone 2 | milestone 3 |
+|  | the grid | the model comparison |
 |---|---|---|
 | test window | last 20% (~291 days) | last 28 days |
 | denominator | in-sample on first 80% | in-sample before the first origin |
@@ -135,7 +135,7 @@ instead.
 ## 8. What the harness is for
 
 Every number here rests on no model having seen data at or after its origin.
-Milestone 2 achieved that with careful `.shift()` arithmetic, which is the kind
+The grid achieved that with careful `.shift()` arithmetic, which is the kind
 of correctness that lasts until someone edits it.
 
 So the harness does not ask for care. It hands the forecaster `y[:origin]` and

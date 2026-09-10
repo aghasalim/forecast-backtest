@@ -1,7 +1,7 @@
-"""Milestone 5 - a backtester that makes leaking the future impossible.
+"""A backtester that makes leaking the future impossible.
 
 Every result in this project depends on one thing: that no model ever saw data
-at or after its forecast origin. Milestone 2 got that right by being careful
+at or after its forecast origin. backtest.py got that right by being careful
 with `.shift()`, which is exactly the kind of correctness that survives until
 someone edits it.
 

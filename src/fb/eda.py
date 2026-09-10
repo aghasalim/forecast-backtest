@@ -1,4 +1,4 @@
-"""Milestone 1 - the autocorrelation that decides how you must evaluate.
+"""The autocorrelation that decides how you must evaluate.
 
 The interesting fact about this dataset is not its seasonality, it is how
 predictable each point is from its immediate neighbours. That single number

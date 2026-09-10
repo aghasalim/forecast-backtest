@@ -1,4 +1,4 @@
-"""Milestone 1a - 678 MB of semicolon-separated text into hourly Parquet.
+"""678 MB of semicolon-separated text into hourly Parquet.
 
 LD2011_2014.txt is 370 electricity meters at 15-minute resolution, written in
 the European convention: `;` as the field separator and `,` as the decimal

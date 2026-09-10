@@ -96,7 +96,7 @@ cycle these meters are dominated by, and it pays for that.
 ## 5. Refitting is worth almost nothing here
 
 
-Milestone 4 existed to show that a single temporal cut is optimistic compared to
+This section exists to show that a single temporal cut is optimistic compared to
 refitting as time advances. Measured:
 
 | policy | MASE median |
@@ -126,7 +126,7 @@ Scale-free errors (MASE) are a requirement here, not a stylistic preference.
 baseline. Beating a naive forecast that ignores seasonality proves nothing; the
 bar is *seasonal naive*, predict this hour with the same hour last week. In
 forecasting it is very common for elaborate models to lose to it, and I would
-rather find that out in milestone 2 than discover it after building something.
+rather find that out in the grid above than discover it after building something.
 
 
 ## 9. Roadmap

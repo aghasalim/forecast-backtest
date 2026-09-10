@@ -1,6 +1,6 @@
-"""Milestones 3 and 4 - real models, and the cost of not refitting.
+"""Real models, and the cost of not refitting.
 
-Milestone 2 used a single temporal cut. That is still optimistic: it fits once
+backtest.py used a single temporal cut. That is still optimistic: it fits once
 and then evaluates a month of forecasts as if the model never went stale. The
 honest protocol is a ROLLING ORIGIN - stand at time o, forecast the next 24
 hours, step forward a day, repeat - which is also the only way to ask whether
