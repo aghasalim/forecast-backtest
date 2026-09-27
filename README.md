@@ -95,7 +95,7 @@ Full detail in [notes/METHODS.md](notes/METHODS.md#3-the-full-grid).
 ### The metric I had to fix first
 
 My first version divided by seasonal naive computed **on the test rows**. At
-h=24 that baseline uses a lag of 191 instead of 168, so it degrades along with
+h=24 that baseline uses a lag of 191, not 168, so it degrades along with
 the model, and h=24 came out looking *better* than h=1, which is impossible.
 The yardstick was moving with the thing being measured. MASE with a fixed
 in-sample denominator removes it. The numbers above are from the corrected
@@ -125,7 +125,7 @@ Full detail in [notes/METHODS.md](notes/METHODS.md#5-refitting-is-worth-almost-n
 
 The grid in section 3 scored the last 20% of every series (about 291 days) with a
 MASE denominator from the first 80%. Section 4 scores the last 28 days with a
-denominator from everything before them, on 14 meters instead of 40. Different
+denominator from everything before them, on 14 of the 40 meters. Different
 window, different denominator, different sample. Comparing 0.72 against 1.08 and
 concluding something changed would be wrong, the split/horizon comparison is
 internally consistent, and so is the model comparison, but not with each other.
@@ -190,8 +190,7 @@ left in.
 
 Full detail in [notes/METHODS.md](notes/METHODS.md#9-roadmap).
 ## 10. What I would do next
-Longer staleness window. Refitting bought 0.3% over 28 days. A year is the
-honest test, because that is long enough for a meter's own behaviour to drift.
+Longer staleness window. Refitting bought 0.3% over 28 days. A year is the real test, because that is long enough for a meter's own behaviour to drift.
 After that, a classical model that can hold a 168-hour cycle would be the fair
 comparator, since ETS lost with only 24-period seasonality. Third is per-series
 reporting: the 79% figure implies 21% of meters where boosting loses, and the
@@ -211,7 +210,7 @@ CC BY 4.0. My code is MIT.
 ## References
 
 Three sources, one per moving part: where the error measure comes from, where
-the models come from, and why the evaluation rolls forward instead of shuffling.
+the models come from, and why the evaluation rolls forward in time.
 
 - **Hyndman, Koehler. Another look at measures of forecast accuracy. International Journal of Forecasting 22, 2006.** MASE, the scale free error measure used throughout.
 - **Hyndman, Athanasopoulos. Forecasting: Principles and Practice, 3rd edition. OTexts, 2021.** ETS and ARIMA, and the rolling origin evaluation this implements.
