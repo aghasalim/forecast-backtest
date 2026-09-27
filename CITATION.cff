@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: If you use this work, please cite it as below.
+title: "What actually inflates a forecasting score, the split, or the horizon?"
+abstract: "Time-series evaluation protocol, measured: the horizon inflates a forecasting score 10x more than the train/test split, and refitting daily for a month is worth 0.3%. Both premises this project was built on, refuted."
+type: software
+authors:
+  - family-names: Mustafazada
+    given-names: Aghasalim
+    orcid: "https://orcid.org/0009-0001-8746-4582"
+    affiliation: "Howest University of Applied Sciences"
+repository-code: "https://github.com/aghasalim/forecast-backtest"
+url: "https://aghasalim.github.io/"
+license: MIT
+keywords:
+  - backtesting
+  - cross validation
+  - forecasting
+  - machine learning
+  - model evaluation
+  - time series
