@@ -86,8 +86,7 @@ MASE compares against a within-series scaling, which does not by itself say the 
 The four cells run from 0.4843 MASE (random split, one hour ahead) to 0.7217
 (temporal split, 24 hours ahead), a spread of 49%, and the horizon accounts for
 almost all of it. Every cell beats the seasonal naive on 100% of the 40 series,
-so this is a comparison between working configurations, not between a working
-one and a broken one.
+so this is a comparison between working configurations.
 
 ![skill against the seasonal naive in every cell](reports/skill.png)
 
@@ -135,8 +134,7 @@ internally consistent, and so is the model comparison, but not with each other.
 over series would report on the largest few meters and nothing else, so a
 scale-free error is a requirement here. The second measurement is that daily and
 weekly autocorrelation are both about 0.9, which fixes the bar at seasonal
-naive, predicting this hour with the same hour last week, not at
-anything simpler.
+naive, predicting this hour with the same hour last week.
 
 Full detail in [notes/METHODS.md](notes/METHODS.md#6-two-other-things-measured-now-because-they-constrain-what-comes-later).
 ## 7. A data decision that would have moved every result
