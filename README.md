@@ -23,7 +23,7 @@ get in both splits is the previous hour, and that is what the horizon takes away
 A second hypothesis, that refitting at every origin matters, was also measured
 and also came out negative, at 0.003 MASE for an order of magnitude more compute.
 
-**Contributions.** (i) A factorial measurement separating split from horizon on
+Contributions. (i) A factorial measurement separating split from horizon on
 the same series, features and seeds. (ii) Two negative results reported as
 negative, with the reasoning that produced the wrong expectation left in
 [NOTES.md](NOTES.md). (iii) A refit ablation showing origin-by-origin refitting is
@@ -66,7 +66,7 @@ interpolate, because it only ever sees earlier values no matter which rows are
 held out. What it does get, in both splits, is *the previous hour*, and that
 is what makes the task easy.
 
-So the honest warning is not "don't shuffle your time series." It is **"a
+So the real warning is not "don't shuffle your time series." It is **"a
 1-step-ahead score is not evidence you can forecast 24 hours out,"** and that
 holds whichever way you split.
 
@@ -125,7 +125,7 @@ Full detail in [notes/METHODS.md](notes/METHODS.md#5-refitting-is-worth-almost-n
 
 The grid in section 3 scored the last 20% of every series (about 291 days) with a
 MASE denominator from the first 80%. Section 4 scores the last 28 days with a
-denominator from everything before them, on 14 meters rather than 40. Different
+denominator from everything before them, on 14 meters instead of 40. Different
 window, different denominator, different sample. Comparing 0.72 against 1.08 and
 concluding something changed would be wrong, the split/horizon comparison is
 internally consistent, and so is the model comparison, but not with each other.
@@ -135,7 +135,7 @@ internally consistent, and so is the model comparison, but not with each other.
 over series would report on the largest few meters and nothing else, so a
 scale-free error is a requirement here. The second measurement is that daily and
 weekly autocorrelation are both about 0.9, which fixes the bar at seasonal
-naive, predicting this hour with the same hour last week, rather than at
+naive, predicting this hour with the same hour last week, not at
 anything simpler.
 
 Full detail in [notes/METHODS.md](notes/METHODS.md#6-two-other-things-measured-now-because-they-constrain-what-comes-later).
@@ -190,7 +190,7 @@ left in.
 
 Full detail in [notes/METHODS.md](notes/METHODS.md#9-roadmap).
 ## 10. What I would do next
-**Longer staleness window.** Refitting bought 0.3% over 28 days. A year is the
+Longer staleness window. Refitting bought 0.3% over 28 days. A year is the
 honest test, because that is long enough for a meter's own behaviour to drift.
 After that, a classical model that can hold a 168-hour cycle would be the fair
 comparator, since ETS lost with only 24-period seasonality. Third is per-series
