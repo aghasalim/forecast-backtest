@@ -13,7 +13,8 @@ jobs:
       - uses: astral-sh/setup-uv@v5
         with:
           enable-cache: true
-      - run: uv sync --frozen
+      - name: install
+        run: uv sync --frozen
 
       # Each self-check asserts a function is correct on a signal whose answer
       # is known analytically, so they need no dataset and CI does not depend
