@@ -54,7 +54,11 @@ def build(series: pd.DataFrame, horizon: int) -> pd.DataFrame:
     shift = horizon - 1
     for lag in LAGS:
         out[f"lag_{lag}"] = d.kwh.shift(lag + shift)
-    out["naive"] = d.kwh.shift(SEASON + shift)     # seasonal naive, same info set
+    # Seasonal naive: the same hour one week back. Shifting it by the extra
+    # (horizon - 1) like the lags would land on a different hour of the day
+    # (191 back at h=24), although the value 168 back is already known 24 hours
+    # ahead. Only once the horizon exceeds a week does it need a whole week more.
+    out["naive"] = d.kwh.shift(SEASON * -(-horizon // SEASON))
     out["hour"] = d.timestamp.dt.hour
     out["dow"] = d.timestamp.dt.dayofweek
     return out.dropna().reset_index(drop=True)
@@ -157,8 +161,10 @@ def demo() -> None:
     i = 300
     assert b1.loc[i, "y"] - b1.loc[i, "lag_1"] == 1.0
     assert b24.loc[i, "y"] - b24.loc[i, "lag_1"] == 24.0, b24.loc[i, "lag_1"]
-    # seasonal naive must sit exactly SEASON steps back at h=1
+    # seasonal naive must sit exactly SEASON steps back at h=1 and at h=24,
+    # because the value a week back is already known a day ahead
     assert b1.loc[i, "y"] - b1.loc[i, "naive"] == float(SEASON)
+    assert b24.loc[i, "y"] - b24.loc[i, "naive"] == float(SEASON), b24.loc[i, "naive"]
     # no NaNs survive
     assert not b1.isna().any().any() and not b24.isna().any().any()
 

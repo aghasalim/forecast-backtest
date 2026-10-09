@@ -87,7 +87,9 @@ MASE compares against a within-series scaling, which does not by itself say the 
 The four cells run from 0.4843 MASE (random split, one hour ahead) to 0.7217
 (temporal split, 24 hours ahead), a spread of 49%, and the horizon accounts for
 almost all of it. Every cell beats the seasonal naive on 100% of the 40 series,
-so this is a comparison between working configurations.
+so this is a comparison between working configurations. The seasonal naive here
+is the same hour one week back at both horizons, since that value is already
+known a day ahead.
 
 ![skill against the seasonal naive in every cell](reports/skill.png)
 
@@ -98,7 +100,10 @@ My first version divided by seasonal naive computed **on the test rows**. At
 h=24 that baseline uses a lag of 191, not 168, so it degrades along with
 the model, and h=24 came out looking *better* than h=1, which is impossible.
 The yardstick was moving with the thing being measured. MASE with a fixed
-in-sample denominator removes it. The numbers above are from the corrected
+in-sample denominator removes it. The head-to-head comparison against seasonal
+naive kept the lag-191 baseline until 2026-10-10; it now uses lag 168 at h=24 as
+well, which moved the median 24h naive MASE from about 1.5 to about 0.97 but left
+every cell beating it on all 40 series. The numbers above are from the corrected
 metric; the confounded ones are in [NOTES.md](NOTES.md).
 
 ## 4. Real models, under a rolling origin

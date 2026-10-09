@@ -16,8 +16,8 @@
    "horizon": 24,
    "series": 40,
    "mase_median": 0.6881775495064526,
-   "mase_naive_median": 1.560432265200609,
-   "skill_median": 0.4498172363309345,
+   "mase_naive_median": 0.9887804317803304,
+   "skill_median": 0.6900446661273446,
    "beats_naive_frac": 1.0
   },
   "temporal_h1": {
@@ -34,8 +34,8 @@
    "horizon": 24,
    "series": 40,
    "mase_median": 0.7217264998633928,
-   "mase_naive_median": 1.524751831894228,
-   "skill_median": 0.4805395330391423,
+   "mase_naive_median": 0.9542180069438086,
+   "skill_median": 0.7528629793408121,
    "beats_naive_frac": 1.0
   }
  },

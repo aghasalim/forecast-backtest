@@ -148,3 +148,18 @@ history, or a constant series where MASE is undefined.
 That is the same shape as the gate in `recsys-offline-online`: the useful
 artefact is not a better estimate, it is a thing that will not hand you a
 number it cannot stand behind.
+
+## 9. The baseline still had the lag-191 problem (2026-10-10)
+
+Section 4 fixed the MASE denominator but not the head-to-head baseline. In
+`backtest.py` the seasonal naive column was shifted by `SEASON + horizon - 1`,
+so at h=24 it predicted from 191 hours back, a different hour of the day, while
+the value 168 hours back was already known. `models.py` had it right. It is now
+the value a week back at both horizons, and the self-check asserts that at
+h=24 too.
+
+The model MASE values do not move, the baseline does: median seasonal naive
+MASE at h=24 went from 1.5604 to 0.9888 (random) and from 1.5248 to 0.9542
+(temporal), and median model/naive ratio from 0.45 to 0.69 and from 0.48 to
+0.75. Every cell still beats the seasonal naive on all 40 series, so the claim
+stands, by a smaller margin at 24 hours.
