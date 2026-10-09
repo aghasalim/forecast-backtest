@@ -47,11 +47,17 @@ better than predicting this hour with the same hour last week. 40 meters.
 |---|---|---|---|---|
 | random | 1h | **0.4843** | 1.0030 | 100% |
 | temporal | 1h | 0.5040 | 0.9545 | 100% |
-| random | 24h | 0.6882 | 1.5604 | 100% |
-| temporal | 24h | **0.7217** | 1.5248 | 100% |
+| random | 24h | 0.6882 | 0.9888 | 100% |
+| temporal | 24h | **0.7217** | 0.9542 | 100% |
 
 The most flattering cell and the most honest cell differ by **49%** in MASE,
 and almost all of that is the horizon.
+
+The seasonal naive column is the same hour one week back at both horizons.
+At h=24 that value is 168 hours old, which is already known a day ahead, so the
+baseline gets no extra delay. An earlier version shifted it by the extra 23
+hours like the lag features, which compared the model against the value 191
+hours back, a different hour of the day, and put the 24h naive at about 1.5.
 
 Seasonal naive scores **1.0030** at h=1, and it has to be ~1.0 by construction
 because it *is* the denominator. That is the check that the metric is right
