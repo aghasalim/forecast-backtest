@@ -163,3 +163,11 @@ MASE at h=24 went from 1.5604 to 0.9888 (random) and from 1.5248 to 0.9542
 (temporal), and median model/naive ratio from 0.45 to 0.69 and from 0.48 to
 0.75. Every cell still beats the seasonal naive on all 40 series, so the claim
 stands, by a smaller margin at 24 hours.
+
+## 10. The skill bars showed the ratio, not the skill (2026-10-10)
+
+`reports/skill.png` plotted `skill_median`, which is model MAE over naive MAE,
+under a legend saying "1 - MASE model / MASE naive". A bar at 48% meant the
+model kept 48% of the naive error, not that it removed 48%. The figure now plots
+1 minus the ratio, so the bars read 52%, 31%, 47% and 25% skill, and the
+self-check pins that conversion.

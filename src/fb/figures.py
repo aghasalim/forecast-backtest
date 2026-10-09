@@ -320,6 +320,13 @@ def dataset(out: Path) -> Path:
     return out
 
 
+def skill_pct(cell: dict) -> float:
+    """Skill in percent, 1 - model/naive. backtest.json stores the ratio itself
+    as skill_median, so plotting that field directly would show 100 minus the
+    skill under a label that says skill."""
+    return (1 - cell["skill_median"]) * 100
+
+
 def skill(out: Path) -> Path:
     """Skill over the naive baseline in each cell of the 2x2.
 
@@ -335,10 +342,10 @@ def skill(out: Path) -> Path:
 
     figure, ax = plt.subplots(figsize=(9.5, 5.0))
     positions = np.arange(len(labels))
-    skills = [cells[c]["skill_median"] * 100 for c in labels]
+    skills = [skill_pct(cells[c]) for c in labels]
     shares = [cells[c]["beats_naive_frac"] * 100 for c in labels]
     ax.bar(positions - 0.19, skills, 0.36, color=PALETTE[0], edgecolor="none",
-           label="median skill, 1 - MASE model / MASE naive")
+           label="median skill, 1 - MAE model / MAE naive")
     ax.bar(positions + 0.19, shares, 0.36, color=PALETTE[2], edgecolor="none",
            label="meters that beat the seasonal naive")
     for x, value in zip(positions, skills, strict=True):
@@ -385,6 +392,12 @@ def demo() -> None:
     assert abs(split / baseline * 100 - 4.1) < 0.1, split / baseline * 100
     assert abs(horizon / baseline * 100 - 42.1) < 0.1, horizon / baseline * 100
     assert horizon > split * 5, "the whole point is that the horizon dominates"
+
+    # The skill bars are 1 - model/naive, the quantity their label names. A model
+    # with half the naive error has 50% skill, not 50% as the raw ratio.
+    assert abs(skill_pct({"skill_median": 0.3}) - 70.0) < 1e-9
+    for c in cells.values():
+        assert (skill_pct(c) > 0) == (c["skill_median"] < 1)
     print("self-check ok")
 
 
