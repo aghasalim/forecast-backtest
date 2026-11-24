@@ -1,3 +1,5 @@
+<p align="center"><img src="assets/banner.jpg" alt="Line drawing of a time series with sliding windows marching along it and a forecast cone at the end" width="100%"></p>
+
 # What actually inflates a forecasting score, the split, or the horizon?
 
 [![ci](https://github.com/aghasalim/forecast-backtest/actions/workflows/ci.yml/badge.svg)](https://github.com/aghasalim/forecast-backtest/actions/workflows/ci.yml)
@@ -5,6 +7,26 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23003631.svg)](https://doi.org/10.5281/zenodo.23003631)
 
 ---
+
+<details>
+<summary>Contents</summary>
+
+- [Abstract](#abstract)
+- [1. Introduction](#1-introduction)
+- [2. The data](#2-the-data)
+- [3. The full grid](#3-the-full-grid)
+- [4. Real models, under a rolling origin](#4-real-models-under-a-rolling-origin)
+- [5. Refitting is worth almost nothing here](#5-refitting-is-worth-almost-nothing-here)
+- [6. Two other things measured now because they constrain what comes later](#6-two-other-things-measured-now-because-they-constrain-what-comes-later)
+- [7. A data decision that would have moved every result](#7-a-data-decision-that-would-have-moved-every-result)
+- [8. Reproducibility](#8-reproducibility)
+- [9. Roadmap](#9-roadmap)
+- [10. What I would do next](#10-what-i-would-do-next)
+- [11. Stack](#11-stack)
+- [12. Data source](#12-data-source)
+- [References](#references)
+
+</details>
 
 ## Abstract
 
