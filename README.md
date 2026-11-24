@@ -1,5 +1,3 @@
-<p align="center"><img src="assets/banner.jpg" alt="Line drawing of a time series with sliding windows marching along it and a forecast cone at the end" width="100%"></p>
-
 # What actually inflates a forecasting score, the split, or the horizon?
 
 [![ci](https://github.com/aghasalim/forecast-backtest/actions/workflows/ci.yml/badge.svg)](https://github.com/aghasalim/forecast-backtest/actions/workflows/ci.yml)
